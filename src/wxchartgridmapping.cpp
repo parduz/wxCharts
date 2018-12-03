@@ -34,6 +34,9 @@
 #include "wxchartgridmapping.h"
 #include "wxchartnumericalaxis.h"
 
+//#define LogFunction(str)		fprintf(stdout, "   - +++ %s: %s\n",__FUNCTION__,(str))
+#define LogFunction(str)
+
 wxChartGridMapping::wxChartGridMapping(const wxSize &size,
                                        const wxChartAxis::ptr xAxis,
                                        const wxChartAxis::ptr yAxis)
@@ -51,29 +54,52 @@ void wxChartGridMapping::SetSize(const wxSize &size)
     m_size = size;
 }
 
-wxPoint2DDouble wxChartGridMapping::GetWindowPosition(wxDouble x, 
+wxPoint2DDouble wxChartGridMapping::GetWindowPosition(wxDouble x,
                                                       wxDouble y) const
 {
     const wxChartNumericalAxis& numericalXAxis = static_cast<const wxChartNumericalAxis&>(*m_XAxis);
     const wxChartNumericalAxis& numericalYAxis = static_cast<const wxChartNumericalAxis&>(*m_YAxis);
 
-    if ((numericalXAxis.GetOptions().GetPosition() == wxCHARTAXISPOSITION_BOTTOM) &&
-        (m_YAxis->GetOptions().GetPosition() == wxCHARTAXISPOSITION_LEFT))
+    if (
+	  numericalXAxis.GetOptions().IsHorizontal() &&
+	  m_YAxis->GetOptions().IsVertical()
+	){
+        return wxPoint2DDouble(
+            m_XAxis->GetPosition((x - numericalXAxis.GetMinValue()) / (numericalXAxis.GetMaxValue() - numericalXAxis.GetMinValue())).m_x,
+            m_YAxis->GetPosition((y - numericalYAxis.GetMinValue()) / (numericalYAxis.GetMaxValue() - numericalYAxis.GetMinValue())).m_y
+            );
+    }
+    else if (
+	  numericalXAxis.GetOptions().IsVertical() &&
+	  m_YAxis->GetOptions().IsHorizontal()
+    ) {
+        return wxPoint2DDouble(
+            m_YAxis->GetPosition((y - numericalYAxis.GetMinValue()) / (numericalYAxis.GetMaxValue() - numericalYAxis.GetMinValue())).m_x,
+            m_XAxis->GetPosition((x - numericalXAxis.GetMinValue()) / (numericalXAxis.GetMaxValue() - numericalXAxis.GetMinValue())).m_y
+            );
+    }
+	else {
+		LogFunction("WHAT?");
+	}
+/*
+
+    if ((numericalXAxis.GetOptions().GetLocation() == wxCHARTAXISPOSITION_BOTTOM) &&
+        (m_YAxis->GetOptions().GetLocation() == wxCHARTAXISPOSITION_LEFT))
     {
         return wxPoint2DDouble(
             m_XAxis->GetPosition((x - numericalXAxis.GetMinValue()) / (numericalXAxis.GetMaxValue() - numericalXAxis.GetMinValue())).m_x,
             m_YAxis->GetPosition((y - numericalYAxis.GetMinValue()) / (numericalYAxis.GetMaxValue() - numericalYAxis.GetMinValue())).m_y
             );
     }
-    else if ((numericalXAxis.GetOptions().GetPosition() == wxCHARTAXISPOSITION_LEFT) &&
-        (m_YAxis->GetOptions().GetPosition() == wxCHARTAXISPOSITION_BOTTOM))
+    else if ((numericalXAxis.GetOptions().GetLocation() == wxCHARTAXISPOSITION_LEFT) &&
+        (m_YAxis->GetOptions().GetLocation() == wxCHARTAXISPOSITION_BOTTOM))
     {
         return wxPoint2DDouble(
             m_YAxis->GetPosition((y - numericalYAxis.GetMinValue()) / (numericalYAxis.GetMaxValue() - numericalYAxis.GetMinValue())).m_x,
             m_XAxis->GetPosition((x - numericalXAxis.GetMinValue()) / (numericalXAxis.GetMaxValue() - numericalXAxis.GetMinValue())).m_y
             );
     }
-
+*/
     wxTrap();
     return wxPoint2DDouble(0, 0);
 }
@@ -83,23 +109,46 @@ wxPoint2DDouble wxChartGridMapping::GetWindowPositionAtTickMark(size_t index,
 {
     const wxChartNumericalAxis& numericalYAxis = static_cast<const wxChartNumericalAxis&>(*m_YAxis);
 
-    if ((m_XAxis->GetOptions().GetPosition() == wxCHARTAXISPOSITION_BOTTOM) &&
-        (m_YAxis->GetOptions().GetPosition() == wxCHARTAXISPOSITION_LEFT))
+    if (
+	  m_XAxis->GetOptions().IsHorizontal() &&
+	  m_YAxis->GetOptions().IsVertical()
+	){
+        return wxPoint2DDouble(
+            m_XAxis->GetTickMarkPosition(index).m_x,
+            m_YAxis->GetPosition((value - numericalYAxis.GetMinValue()) / (numericalYAxis.GetMaxValue() - numericalYAxis.GetMinValue())).m_y
+            );
+    }
+    else if (
+	  m_XAxis->GetOptions().IsVertical() &&
+	  m_YAxis->GetOptions().IsHorizontal()
+    ) {
+        return wxPoint2DDouble(
+            m_YAxis->GetPosition((value - numericalYAxis.GetMinValue()) / (numericalYAxis.GetMaxValue() - numericalYAxis.GetMinValue())).m_x,
+            m_XAxis->GetTickMarkPosition(index).m_y
+            );
+    }
+	else {
+		LogFunction("WHAT?");
+	}
+/*
+
+    if ((m_XAxis->GetOptions().GetLocation() == wxCHARTAXISPOSITION_BOTTOM) &&
+        (m_YAxis->GetOptions().GetLocation() == wxCHARTAXISPOSITION_LEFT))
     {
         return wxPoint2DDouble(
             m_XAxis->GetTickMarkPosition(index).m_x,
             m_YAxis->GetPosition((value - numericalYAxis.GetMinValue()) / (numericalYAxis.GetMaxValue() - numericalYAxis.GetMinValue())).m_y
             );
     }
-    else if ((m_XAxis->GetOptions().GetPosition() == wxCHARTAXISPOSITION_LEFT) &&
-        (m_YAxis->GetOptions().GetPosition() == wxCHARTAXISPOSITION_BOTTOM))
+    else if ((m_XAxis->GetOptions().GetLocation() == wxCHARTAXISPOSITION_LEFT) &&
+        (m_YAxis->GetOptions().GetLocation() == wxCHARTAXISPOSITION_BOTTOM))
     {
         return wxPoint2DDouble(
             m_YAxis->GetPosition((value - numericalYAxis.GetMinValue()) / (numericalYAxis.GetMaxValue() - numericalYAxis.GetMinValue())).m_x,
             m_XAxis->GetTickMarkPosition(index).m_y
             );
     }
-
+*/
     wxTrap();
     return wxPoint2DDouble(0, 0);
 }

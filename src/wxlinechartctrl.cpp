@@ -68,8 +68,8 @@ void wxLineChartCtrl::CreateContextMenu()
 {
     m_contextMenu.Append(wxID_SAVEAS, wxString("Save as"));
 
-    Bind(wxEVT_CONTEXT_MENU, 
-        [this](wxContextMenuEvent& evt) 
+    Bind(wxEVT_CONTEXT_MENU,
+        [this](wxContextMenuEvent& evt)
         {
             PopupMenu(&m_contextMenu, ScreenToClient(evt.GetPosition()));
         }
@@ -93,7 +93,7 @@ void wxLineChartCtrl::CreateContextMenu()
                 type = wxBitmapType::wxBITMAP_TYPE_JPEG;
                 if (wxImage::FindHandler(wxBitmapType::wxBITMAP_TYPE_JPEG) == 0)
                 {
-                    wxImage::AddHandler(new wxJPEGHandler());
+//JPEG                    wxImage::AddHandler(new wxJPEGHandler());
                 }
                 break;
 
@@ -105,7 +105,7 @@ void wxLineChartCtrl::CreateContextMenu()
                 }
                 break;
             }
-            
+
             m_lineChart.Save(filename, type, GetSize());
         },
         wxID_SAVEAS

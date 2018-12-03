@@ -65,36 +65,36 @@ void wxChartMultiTooltip::Draw(wxGraphicsContext &gc)
 
     // Update the size of each line to reflect the currently
     // selected options and the contents of each line.
-    for (size_t i = 0; i < m_lines.size(); ++i)
-    {
-        m_lines[i].UpdateSize(gc);
-    }
+//-_-	    for (size_t i = 0; i < m_lines.size(); ++i)
+//-_-	    {
+//-_-	        m_lines[i].UpdateSize(gc);
+//-_-	    }
 
     // Compute the total outer and inner size of the
     // multi-tooltip.
     wxDouble totalInnerWidth = titleWidth;
     wxDouble totalInnerHeight = titleHeight;
-    for (size_t i = 0; i < m_lines.size(); ++i)
-    {
-        wxSize size = m_lines[i].GetSize();
+//-_-	    for (size_t i = 0; i < m_lines.size(); ++i)
+//-_-	    {
+//-_-	        wxSize size = m_lines[i].GetSize();
+//-_-
+//-_-	        totalInnerHeight += size.GetHeight();
+//-_-	        if (m_options.ShowTitle() || (i != 0))
+//-_-	        {
+//-_-	            totalInnerHeight += m_options.GetLineSpacing();
+//-_-	        }
 
-        totalInnerHeight += size.GetHeight();
-        if (m_options.ShowTitle() || (i != 0))
-        {
-            totalInnerHeight += m_options.GetLineSpacing();
-        }
-
-        if (size.GetWidth() > totalInnerWidth)
-        {
-            totalInnerWidth = size.GetWidth();
-        }
-    }
+//-_-	        if (size.GetWidth() > totalInnerWidth)
+//-_-	        {
+//-_-	            totalInnerWidth = size.GetWidth();
+//-_-	        }
+//-_-	    }
 
     wxDouble totalOuterWidth = totalInnerWidth + (2 * m_options.GetHorizontalPadding());
     wxDouble totalOuterHeight = totalInnerHeight + (2 * m_options.GetVerticalPadding());
 
 
-    
+
     // Now that we have the size of all the lines we
     // can calculate their positions.
     /////
@@ -158,11 +158,11 @@ void wxChartMultiTooltip::Draw(wxGraphicsContext &gc)
     {
         y += m_options.GetLineSpacing();
     }
-    for (size_t i = 0; i < m_lines.size(); ++i)
-    {
-        m_lines[i].SetPosition(innerX, y);
-        y += (m_lines[i].GetSize().GetHeight() + m_options.GetLineSpacing());
-    }
+//-_-	    for (size_t i = 0; i < m_lines.size(); ++i)
+//-_-	    {
+//-_-	        m_lines[i].SetPosition(innerX, y);
+//-_-	        y += (m_lines[i].GetSize().GetHeight() + m_options.GetLineSpacing());
+//-_-	    }
 
 
 
@@ -185,19 +185,19 @@ void wxChartMultiTooltip::Draw(wxGraphicsContext &gc)
     }
 
     // Draw the lines
-    for (size_t i = 0; i < m_lines.size(); ++i)
-    {
-        m_lines[i].Draw(gc);
-    }
+//-_-	    for (size_t i = 0; i < m_lines.size(); ++i)
+//-_-	    {
+//-_-	        m_lines[i].Draw(gc);
+//-_-	    }
 }
 
 void wxChartMultiTooltip::AddTooltip(const wxChartTooltip &tooltip)
 {
     m_tooltipPositions.push_back(tooltip.GetPosition());
     m_tooltipProviders.push_back(tooltip.GetProvider());
-    m_lines.push_back(wxChartLegendLine(
-        tooltip.GetProvider()->GetAssociatedColor(), 
-        tooltip.GetProvider()->GetTooltipText(), 
-        wxChartLegendLineOptions(m_options.GetTextFontOptions())
-        ));
+//-_-	    m_lines.push_back(wxChartLegendLine(
+//-_-	        tooltip.GetProvider()->GetAssociatedColor(),
+//-_-	        tooltip.GetProvider()->GetTooltipText(),
+//-_-	        wxChartLegendLineOptions(m_options.GetTextFontOptions())
+//-_-	        ));
 }

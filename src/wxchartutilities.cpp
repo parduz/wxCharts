@@ -40,7 +40,7 @@ size_t wxChartUtilities::GetDecimalPlaces()
 }
 
 void wxChartUtilities::CalculateGridRange(wxDouble minValue,
-                                          wxDouble maxValue, 
+                                          wxDouble maxValue,
                                           wxDouble &graphMinValue,
                                           wxDouble &graphMaxValue,
                                           wxDouble &valueRange,
@@ -82,7 +82,7 @@ void wxChartUtilities::BuildNumericalLabels(wxDouble minValue,
                                             const wxChartLabelOptions &options,
                                             wxVector<wxChartLabel> &labels)
 {
-    size_t stepDecimalPlaces = wxChartUtilities::GetDecimalPlaces();
+    //size_t stepDecimalPlaces = wxChartUtilities::GetDecimalPlaces();
 
     for (size_t i = 0; i <= steps; ++i)
     {
@@ -95,7 +95,7 @@ void wxChartUtilities::BuildNumericalLabels(wxDouble minValue,
 }
 
 void wxChartUtilities::GetTextSize(wxGraphicsContext &gc,
-                                   const wxFont &font, 
+                                   const wxFont &font,
                                    const wxString &string,
                                    wxDouble &width,
                                    wxDouble &height)

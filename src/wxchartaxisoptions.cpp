@@ -22,30 +22,48 @@
 
 #include "wxchartaxisoptions.h"
 
-wxChartAxisOptions::wxChartAxisOptions(wxChartAxisPosition position)
-    : m_position(position), m_labelType(wxCHARTAXISLABELTYPE_POINT),
-    m_startMarginType(wxCHARTAXISMARGINTYPE_NONE), m_endMarginType(wxCHARTAXISMARGINTYPE_NONE),
-    m_startValueMode(wxCHARTAXISVALUEMODE_AUTO), m_startValue(0),
-    m_endValueMode(wxCHARTAXISVALUEMODE_AUTO), m_endValue(0),
-    m_lineWidth(1), m_lineColor(0, 0, 0, 0x19), m_overhang(3),
-    m_fontOptions(wxFONTFAMILY_SWISS, 12, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, 0x666666)
+wxChartAxisOptions::wxChartAxisOptions(wxChartAxisLocation location)
+    : m_location			(location),
+      m_labelType			(wxCHARTAXISLABELTYPE_POINT),
+      m_startMarginType		(wxCHARTAXISMARGINTYPE_NONE),
+      m_endMarginType		(wxCHARTAXISMARGINTYPE_NONE),
+      m_startValueMode		(wxCHARTAXISVALUEMODE_AUTO),
+      m_endValueMode		(wxCHARTAXISVALUEMODE_AUTO),
+      m_startValue			(0),
+      m_endValue			(0),
+      m_lineWidth			(1),
+      m_lineColor			(0, 0, 0, 0x19),
+      m_overhang			(3),
+	  m_fontOptions			(wxFONTFAMILY_SWISS, 12, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, 0x666666),
+	  m_reversed			(false)
 {
 }
 
-wxChartAxisOptions::wxChartAxisOptions(wxChartAxisPosition position,
+wxChartAxisOptions::wxChartAxisOptions(wxChartAxisLocation location,
                                        wxChartAxisLabelType labelType)
-    : m_position(position), m_labelType(labelType),
-    m_startMarginType(wxCHARTAXISMARGINTYPE_NONE), m_endMarginType(wxCHARTAXISMARGINTYPE_NONE),
-    m_startValueMode(wxCHARTAXISVALUEMODE_AUTO), m_startValue(0),
-    m_endValueMode(wxCHARTAXISVALUEMODE_AUTO), m_endValue(0),
-    m_lineWidth(1), m_lineColor(0, 0, 0, 0x19), m_overhang(3),
-    m_fontOptions(wxFONTFAMILY_SWISS, 12, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, 0x666666)
+    : m_location			(location),
+      m_labelType			(labelType),
+      m_startMarginType		(wxCHARTAXISMARGINTYPE_NONE),
+      m_endMarginType		(wxCHARTAXISMARGINTYPE_NONE),
+      m_startValueMode		(wxCHARTAXISVALUEMODE_AUTO),
+      m_endValueMode		(wxCHARTAXISVALUEMODE_AUTO),
+      m_startValue			(0),
+      m_endValue			(0),
+      m_lineWidth			(1),
+      m_lineColor			(0, 0, 0, 0x19),
+      m_overhang			(3),
+	  m_fontOptions			(wxFONTFAMILY_SWISS, 12, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL, 0x666666),
+	  m_reversed			(false)
 {
 }
 
-wxChartAxisPosition wxChartAxisOptions::GetPosition() const
+wxChartAxisLocation wxChartAxisOptions::GetLocation() const
 {
-    return m_position;
+    return m_location;
+}
+void wxChartAxisOptions::SetLocation(wxChartAxisLocation newPos)
+{
+    m_location = newPos;
 }
 
 wxChartAxisLabelType wxChartAxisOptions::GetLabelType() const
@@ -109,10 +127,19 @@ unsigned int wxChartAxisOptions::GetLineWidth() const
 {
     return m_lineWidth;
 }
+void  wxChartAxisOptions::SetLineWidth(unsigned int newWidth)
+{
+	m_lineWidth = newWidth;
+}
 
 const wxColor& wxChartAxisOptions::GetLineColor() const
 {
     return m_lineColor;
+}
+
+void wxChartAxisOptions::SetLineColor(const wxColor NewColor)
+{
+    m_lineColor = NewColor;
 }
 
 wxDouble wxChartAxisOptions::GetOverhang() const

@@ -33,11 +33,18 @@
 
 #include "wxchartnumericalaxis.h"
 #include "wxchartutilities.h"
-
-wxChartNumericalAxis::wxChartNumericalAxis(const std::string &id, 
+/*
+wxChartNumericalAxis::wxChartNumericalAxis(const std::string &id,
                                            wxDouble minValue,
                                            wxDouble maxValue,
                                            const wxChartAxisOptions &options)
+*/
+wxChartNumericalAxis::wxChartNumericalAxis(const std::string &id,
+                                           wxDouble minValue,
+                                           wxDouble maxValue,
+                                           const wxChartAxisOptions &options,
+                                           bool Forced
+                                           )
     : wxChartAxis(id, options),
     m_minValue(minValue), m_maxValue(maxValue)
 {
@@ -52,13 +59,47 @@ wxChartNumericalAxis::wxChartNumericalAxis(const std::string &id,
         effectiveMaxXValue = options.GetEndValue();
     }
 
+
+
     wxDouble graphMinXValue;
     wxDouble graphMaxXValue;
     wxDouble xValueRange = 0;
     size_t steps = 0;
     wxDouble stepValue = 0;
-    wxChartUtilities::CalculateGridRange(effectiveMinXValue, effectiveMaxXValue,
-        graphMinXValue, graphMaxXValue, xValueRange, steps, stepValue);
+
+    if ( Forced || options.GetEndValueMode() == wxCHARTAXISVALUEMODE_EXPLICIT ) {
+		graphMinXValue = floor(effectiveMinXValue);
+		graphMaxXValue = ceil(effectiveMaxXValue);
+		xValueRange = int(graphMaxXValue - graphMinXValue);
+		if (fmod(xValueRange,10) == 0) {
+			steps = 10;
+		}else if (fmod(xValueRange,8) == 0) {
+			steps = 8;
+		}else if (fmod(xValueRange,6) == 0) {
+			steps = 6;
+		}else if (fmod(xValueRange,5) == 0) {
+			steps = 5;
+		}else if (fmod(xValueRange,4) == 0) {
+			steps = 4;
+		}else if (fmod(xValueRange,3) == 0) {
+			steps = 3;
+		}else if (fmod(xValueRange,2) == 0) {
+			steps = 2;
+		}else{
+			steps = 1;
+		}
+		stepValue = xValueRange/steps;
+    }else{
+        wxChartUtilities::CalculateGridRange(
+			effectiveMinXValue,
+			effectiveMaxXValue,
+			graphMinXValue,
+			graphMaxXValue,
+			xValueRange,
+			steps,
+			stepValue
+		);
+    }
 
     SetMinValue(graphMinXValue);
     SetMaxValue(graphMaxXValue);
@@ -73,7 +114,7 @@ wxChartNumericalAxis::wxChartNumericalAxis(const std::string &id,
     SetLabels(xLabels);
 }
 
-wxChartNumericalAxis::ptr wxChartNumericalAxis::make_shared(const std::string &id, 
+wxChartNumericalAxis::ptr wxChartNumericalAxis::make_shared(const std::string &id,
                                                             wxDouble minValue,
                                                             wxDouble maxValue,
                                                             const wxChartAxisOptions &options)

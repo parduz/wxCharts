@@ -23,7 +23,7 @@
 #include "wxchartlabelgroup.h"
 
 wxChartLabelGroup::wxChartLabelGroup()
-    : m_maxWidth(0)
+    : m_px_maxWidth(0)
 {
 }
 
@@ -37,21 +37,24 @@ void wxChartLabelGroup::Draw(wxGraphicsContext &gc) const
 
 void wxChartLabelGroup::UpdateSizes(wxGraphicsContext &gc)
 {
-    m_maxWidth = 0;
+	int LabelWidth;
+    m_px_maxWidth = 0;
 
     for (size_t i = 0; i < size(); ++i)
     {
         (*this)[i].UpdateSize(gc);
 
-        const wxSize size = (*this)[i].GetSize();
-        if (size.GetWidth() > m_maxWidth)
+        // -_- const wxSize size = (*this)[i].GetSize();
+        LabelWidth = (*this)[i].GetSize().GetWidth();
+        if (LabelWidth > m_px_maxWidth)
         {
-            m_maxWidth = size.GetWidth();
+            m_px_maxWidth = LabelWidth;
         }
     }
 }
 
-wxDouble wxChartLabelGroup::GetMaxWidth() const
+//-_- wxDouble wxChartLabelGroup::GetMaxWidth() const
+int wxChartLabelGroup::GetMaxWidth() const
 {
-    return m_maxWidth;
+    return m_px_maxWidth;
 }
