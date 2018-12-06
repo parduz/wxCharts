@@ -49,7 +49,7 @@ class wxChartNumericalAxis : public wxChartAxis
 {
 public:
     /// Constructs a wxChartNumericalAxis axis. The
-    /// tick marks on the axis are computed automatically 
+    /// tick marks on the axis are computed automatically
     /// using the minimum and maximum values that need to
     /// be displayed on the grid.
     /// @param minYValue The minimum of the values that
@@ -58,10 +58,13 @@ public:
     /// will be shown on the axis.
     /// @param options The settings to be used for the
     /// axis.
+//    wxChartNumericalAxis(const std::string &id, wxDouble minValue, wxDouble maxValue,
+//        const wxChartAxisOptions &options);
     wxChartNumericalAxis(const std::string &id, wxDouble minValue, wxDouble maxValue,
-        const wxChartAxisOptions &options);
+        const wxChartAxisOptions &options,bool Forced=false);
     static ptr make_shared(const std::string &id, wxDouble minValue, wxDouble maxValue,
         const wxChartAxisOptions &options);
+
 
     wxDouble GetMinValue() const;
     void SetMinValue(wxDouble minValue);

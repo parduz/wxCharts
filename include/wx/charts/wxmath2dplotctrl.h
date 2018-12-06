@@ -66,7 +66,10 @@ public:
         const wxMath2DPlotOptions &options, const wxPoint &pos = wxDefaultPosition,
         const wxSize &size = wxDefaultSize, long style = 0);
 
-    bool UpdateData(std::size_t index,const wxVector<wxPoint2DDouble> &points);
+    bool UpdateData							(std::size_t index,const wxVector<wxPoint2DDouble> &points);
+    bool UpdateDataPoints					(std::size_t index,const wxVector<wxPoint2DDouble> &points);
+	bool UpdateDataPointsFromArrayOfBytes	(std::size_t index,const unsigned char *byteArray, const std::size_t ArraySize);
+
     bool AddData(std::size_t index,const wxVector<wxPoint2DDouble> &points);
     bool RemoveDataset(std::size_t index);
     void AddDataset(const wxMath2DPlotDataset::ptr &newset);
@@ -77,11 +80,15 @@ public:
     void  SetChartOptions(const wxMath2DPlotOptions& opt);
     void  SetChartType(std::size_t index,const wxChartType &type);
 
+    void SetAutoAxesRange();
+    void SetFixedAxesRange(const wxPoint2DDouble& min,const wxPoint2DDouble& max);
+    void SetForcedAxesRange(const wxPoint2DDouble& min,const wxPoint2DDouble& max);
 private:
     virtual wxMath2DPlot& GetChart();
 
     void CreateContextMenu();
     void Update();
+    void Refresh();
 
 private:
     wxMath2DPlot m_math2dPlot;

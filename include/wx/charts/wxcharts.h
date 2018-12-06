@@ -25,39 +25,43 @@
 #ifndef _WX_CHARTS_WXCHARTS_H_
 #define _WX_CHARTS_WXCHARTS_H_
 
+/* -_-CALZOLARI-_-
+//-_-	is the comment i use to "exclude" things. Search for it to remove my modifications
+
+*/ // -_-CALZOLARI-_-
+
 #include "wxchartcategoricalaxis.h"
 #include "wxchartnumericalaxis.h"
 
-#include "wxbarchartctrl.h"
-#include "wxstackedbarchartctrl.h"
-#include "wxcolumnchartctrl.h"
-#include "wxstackedcolumnchartctrl.h"
+//-_-	#include "wxbarchartctrl.h"
+//-_-	#include "wxstackedbarchartctrl.h"
+//-_-	#include "wxcolumnchartctrl.h"
+//-_-	#include "wxstackedcolumnchartctrl.h"
 #include "wxlinechartctrl.h"
-#include "wxtimeserieschartctrl.h"
-#include "wxdoughnutchartctrl.h"
-#include "wxpiechartctrl.h"
-#include "wxpolarareachartctrl.h"
-#include "wxradarchartctrl.h"
-#include "wxscatterplotctrl.h"
+//-_-	#include "wxtimeserieschartctrl.h"
+//-_-	#include "wxdoughnutchartctrl.h"
+//-_-	#include "wxpiechartctrl.h"
+//-_-	#include "wxpolarareachartctrl.h"
+//-_-	#include "wxradarchartctrl.h"
+//-_-	#include "wxscatterplotctrl.h"
 #include "wxmath2dplotctrl.h"
-#include "wxareachartctrl.h"
-#include "wxbubblechartctrl.h"
-#include "wxcandlestickchartctrl.h"
-#include "wxohlcchartctrl.h"
-#include "wxcombinationchartctrl.h"
-#include "wxchartlegendctrl.h"
-#include "wxhistchartctrl.h"
+//-_-	#include "wxareachartctrl.h"
+//-_-	#include "wxbubblechartctrl.h"
+//-_-	#include "wxcandlestickchartctrl.h"
+//-_-	#include "wxohlcchartctrl.h"
+//-_-	#include "wxcombinationchartctrl.h"
+//-_-	#include "wxchartlegendctrl.h"
+//-_-	#include "wxhistchartctrl.h"
 
-#include "wxchartstheme.h"
+//-_-	#include "wxchartstheme.h"
 
-#ifdef _MSC_VER
+//-_-	#ifdef _MSC_VER
+//-_-	 #ifdef _DEBUG
+//-_-	  #pragma comment(lib, "wxchartsd.lib")
+//-_-	 #else
+//-_-	  #pragma comment(lib, "wxcharts.lib")
+//-_-	 #endif
+//-_-	#endif
 
-#ifdef _DEBUG
-#pragma comment(lib, "wxchartsd.lib")
-#else
-#pragma comment(lib, "wxcharts.lib")
-#endif
-
-#endif
 
 #endif

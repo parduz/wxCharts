@@ -27,18 +27,18 @@
 
 #include "wxchartmultitooltipoptions.h"
 #include "wxcharttooltip.h"
-#include "wxchartlegendline.h"
+//-_-	#include "wxchartlegendline.h"
 #include <wx/graphics.h>
 
 /// This class is used to display a tooltip.
 
 /// Charts can display tooltips in response to a user
 /// action (e.g. hoverin with the mouse over some part
-/// of the chart). This class implements such 
+/// of the chart). This class implements such
 /// tooltips.
 /// Unlike the wxChartTooltip class this class can
 /// display information about multiple items at once
-/// for those case where the user selects more than 
+/// for those case where the user selects more than
 /// one item at a time.
 class wxChartMultiTooltip
 {
@@ -56,11 +56,11 @@ public:
     void AddTooltip(const wxChartTooltip &tooltip);
 
 private:
+    wxString m_title; //-_-	was under m_options: Resolve the -Wreorder warning
     wxChartMultiTooltipOptions m_options;
-    wxString m_title;
     wxVector<wxPoint2DDouble> m_tooltipPositions;
     wxVector<wxChartTooltipProvider::ptr> m_tooltipProviders;
-    wxVector<wxChartLegendLine> m_lines;
+//-_-	    wxVector<wxChartLegendLine> m_lines;
 };
 
 #endif

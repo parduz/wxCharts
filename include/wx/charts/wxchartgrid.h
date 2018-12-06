@@ -129,12 +129,13 @@ public:
     void ChangeCorners(wxDouble minX,wxDouble maxX,
         wxDouble minY,wxDouble maxY);
     void UpdateAxisLimit(const std::string& axisId, wxDouble min, wxDouble max);
+    void UpdateForcedAxisLimit(const std::string& axisId, wxDouble min, wxDouble max);
     void ChangeLabels(const std::string& axisId, const wxVector<wxString> &labels, wxChartAxisOptions options);
 
 private:
     void Update();
-    void CalculatePadding(const wxChartAxis &xAxis,
-        const wxChartAxis &yAxis, wxDouble &left, wxDouble &right);
+//-_-    void CalculatePadding(const wxChartAxis &xAxis,
+//-_-        const wxChartAxis &yAxis, wxDouble &left, wxDouble &right);
     static void DrawHorizontalGridLines(const wxChartAxis &horizontalAxis, const wxChartAxis &verticalAxis,
         const wxChartGridLineOptions &options, wxGraphicsContext &gc);
     static void DrawVerticalGridLines(const wxChartAxis &horizontalAxis, const wxChartAxis &verticalAxis,
@@ -143,26 +144,27 @@ private:
 private:
     struct AxisLimits
     {
-    AxisLimits(wxDouble p1,wxDouble p2,wxDouble p3,wxDouble p4)
-        : MinX(p1),MaxX(p2),MinY(p3),MaxY(p4) {}
-    AxisLimits() {}
-    wxDouble MinX;
-    wxDouble MaxX;
-    wxDouble MinY;
-    wxDouble MaxY;
+		AxisLimits(wxDouble p1,wxDouble p2,wxDouble p3,wxDouble p4)
+			: MinX(p1),MaxX(p2),MinY(p3),MaxY(p4) {}
+		AxisLimits() {}
+		wxDouble MinX;
+		wxDouble MaxX;
+		wxDouble MinY;
+		wxDouble MaxY;
     };
+	wxRect		m_pxGraphArea;
 
 private:
-    wxChartGridOptions m_options;
-    wxPoint2DDouble m_position;
-    wxChartAxis::ptr m_XAxis;
-    wxChartAxis::ptr m_YAxis;
+    wxChartGridOptions		m_options;
+    wxPoint2DDouble			m_position;
+    wxChartAxis::ptr		m_XAxis;
+    wxChartAxis::ptr		m_YAxis;
     wxChartGridMapping m_mapping;
     // Whether something has changed and we
     // need to rearrange the chart
-    bool m_needsFit;
-    AxisLimits m_curAxisLimits;
-    AxisLimits m_origAxisLimits;
+    bool					m_needsFit;
+    AxisLimits				m_origAxisLimits;	//-_-	was under m_curAxisLimits: Resolve the -Wreorder warning
+    AxisLimits				m_curAxisLimits;
 };
 
 #endif

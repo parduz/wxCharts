@@ -39,13 +39,15 @@ public:
 
     /// Gets the width of the widest label. Note that
     /// this assumes the size of the labels has been
-    /// correctly set for instance using the 
+    /// correctly set for instance using the
     /// UpdateSizes(wxGraphicsContext &gc) function.
     /// @return The maximum width of the labels.
-    wxDouble GetMaxWidth() const;
+    //-_- wxDouble GetMaxWidth() const;
+    int GetMaxWidth() const;
 
 private:
-    wxDouble m_maxWidth;
+//-_-    wxDouble m_maxWidth;
+    int m_px_maxWidth;
 };
 
 #endif

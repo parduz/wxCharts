@@ -41,6 +41,17 @@
 #include "wxchartlabelgroup.h"
 #include <wx/graphics.h>
 
+//-_- i plan to see what will happen if i switch everything to
+//-_- Int32
+#define USE_WXPOINTDOUBLE
+#ifdef USE_WXPOINTDOUBLE
+ typedef	wxDouble		myVarType;
+ typedef	wxPoint2DDouble	myPointType;
+#else
+ typedef	int				myVarType;
+ typedef	wxPoint2DInt	myPointType;
+#endif // USE_WXPOINTDOUBLE
+
 /// This class represents an axis.
 
 /// \ingroup elementclasses
@@ -54,14 +65,18 @@ public:
 
     virtual bool HitTest(const wxPoint &point) const;
 
-    virtual wxPoint2DDouble GetTooltipPosition() const;
+    virtual myPointType GetTooltipPosition() const;
 
-    /// Updates the size of each label using the 
+    /// Updates the size of each label using the
     /// font details specified in the axis options
     /// and the provided graphics context.
     /// @param gc The graphics context.
     void UpdateLabelSizes(wxGraphicsContext &gc);
-    void Fit(wxPoint2DDouble startPoint, wxPoint2DDouble endPoint);
+#ifdef USE_WXPOINTDOUBLE
+    void Fit(myPointType startPoint, myPointType endPoint);
+#else
+    void Fit(wxPoint startPoint, wxPoint endPoint);
+#endif
     void UpdateLabelPositions();
 
     /// Gets the labels.
@@ -69,14 +84,28 @@ public:
     const wxChartLabelGroup& GetLabels() const;
     void SetLabels(const wxVector<wxChartLabel> &labels);
 
-    wxPoint2DDouble CalculateLabelPosition(size_t index);
+    myPointType CalculateLabelPosition(size_t index);
     size_t GetNumberOfTickMarks() const;
-    wxDouble GetDistanceBetweenTickMarks() const;
-    wxPoint2DDouble GetTickMarkPosition(size_t index) const;
-    wxPoint2DDouble GetPosition(wxDouble relativeValue) const;
+    myVarType GetDistanceBetweenTickMarks() const;
+    myPointType GetTickMarkPosition(size_t index) const;
+    myPointType GetPosition(myVarType relativeValue) const;
 
     const std::string& GetId() const;
-    const wxChartAxisOptions& GetOptions() const;
+    const	wxChartAxisOptions& GetOptions() const;
+	void	SetOptions(const wxChartAxisOptions& newOpt);
+
+
+	void FitInThisRect			(const wxRect pxArea);	//-_-
+
+	//-_- make getter/setter, or privatize, these stuffs
+	//-_- pre-calculate things that doesn't changes until properties/range/size changes
+	void		UpdateLabelsHeight			();
+	void		UpdateLabelsFixedPositions		();
+	myVarType	distance, marginCorrection;	// these were calculated each time, no need to do it
+	int			pxLabelX,pxLabelY;			//-_- Coordinates or values in Pixels, pre-calculated coords for drawing labels
+	int			pxPadding;					//-_- minimum padding needeed to make rooms for the labels + tickmarks
+	wxSize		pxMaxLabelDimensions;
+
 
 protected:
     /// Construcs a wxChartAxis element.
@@ -94,8 +123,10 @@ private:
 private:
     wxChartAxisOptions m_options;
     std::string m_id;
-    wxPoint2DDouble m_startPoint;
-    wxPoint2DDouble m_endPoint;
+
+     myPointType m_startPoint;
+     myPointType m_endPoint;
+
     wxChartLabelGroup m_labels;
 };
 

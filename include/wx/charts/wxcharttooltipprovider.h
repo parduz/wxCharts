@@ -39,6 +39,8 @@ public:
     /// Constructs a wxChartTooltipProvider instance.
     wxChartTooltipProvider();
 
+	virtual ~wxChartTooltipProvider(){};	// Added: resolve the -Wdelete-non-virtual-dtor warning
+
     // Gets the title of the tooltip.
     /// @return A wxString containing the title of the tooltip.
     virtual wxString GetTooltipTitle() const = 0;
