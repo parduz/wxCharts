@@ -72,11 +72,7 @@ public:
     /// and the provided graphics context.
     /// @param gc The graphics context.
     void UpdateLabelSizes(wxGraphicsContext &gc);
-#ifdef USE_WXPOINTDOUBLE
     void Fit(myPointType startPoint, myPointType endPoint);
-#else
-    void Fit(wxPoint startPoint, wxPoint endPoint);
-#endif
     void UpdateLabelPositions();
 
     /// Gets the labels.
