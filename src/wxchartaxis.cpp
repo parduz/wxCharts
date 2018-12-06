@@ -35,19 +35,9 @@
 #include <wx/pen.h>
 
 #define LogFunction(str)		fprintf(stdout, "   - +++ %s: %s\n",__FUNCTION__,(str))
-
 #ifndef LogFunction
  #define LogFunction(str)
 #endif // LogFunction
-
-#define pSTART		m_startPoint
-#define pEND		m_endPoint
-#define pSTART_X	pSTART.m_x
-#define pSTART_Y	pSTART.m_y
-#define pEND_X		pEND.m_x
-#define pEND_Y		pEND.m_y
-
-
 
 //-_- Should'nt be a property?
 #define TICKMARKS_LENGTH	5
@@ -67,32 +57,20 @@ void wxChartAxis::Draw(wxGraphicsContext &gc) const
 		case wxCHARTAXISPOSITION_RIGHT:
 		case wxCHARTAXISPOSITION_LEFT:
 			path.MoveToPoint(m_startPoint);
-			path.AddLineToPoint(pEND_X, pEND_Y - m_options.GetOverhang());
+			path.AddLineToPoint(m_endPoint.m_x, m_endPoint.m_y - m_options.GetOverhang());
 			break;
 		case wxCHARTAXISPOSITION_TOP:
 //			path.MoveToPoint(m_endPoint);
-//			path.AddLineToPoint(pSTART_X + m_options.GetOverhang(), pEND_Y);
+//			path.AddLineToPoint(m_startPoint.m_x + m_options.GetOverhang(), m_endPoint.m_y);
 //			break;
 		case wxCHARTAXISPOSITION_BOTTOM:
 			path.MoveToPoint(m_startPoint);
-			path.AddLineToPoint(pEND_X + m_options.GetOverhang(), pEND_Y);
+			path.AddLineToPoint(m_endPoint.m_x + m_options.GetOverhang(), m_endPoint.m_y);
 			break;
 		default:
 			LogFunction("WHAT?");
 			break;
 	}
-/*
-    if (chaxLocation == wxCHARTAXISPOSITION_LEFT)
-    {
-        path.MoveToPoint(m_startPoint);
-        path.AddLineToPoint(pEND_X, pEND_Y - m_options.GetOverhang());
-    }
-    else if (chaxLocation == wxCHARTAXISPOSITION_BOTTOM)
-    {
-        path.MoveToPoint(m_startPoint);
-        path.AddLineToPoint(pEND_X + m_options.GetOverhang(), pEND_Y);
-    }
-*/
     gc.StrokePath(path);
 
     DrawTickMarks(gc);	// Draw the little lines corresponding to the labels
@@ -108,8 +86,8 @@ wxChartAxis::wxChartAxis(const std::string &id,
       m_startPoint(0, 0),
       m_endPoint(0, 0)
 {
-	UpdateLabelsHeight();	 //-_- OPTIMIZE: do it only if differences between old and new options
-	UpdateLabelsFixedPositions();	 //-_- OPTIMIZE: do it only if differences between old and new options
+	UpdateLabelsHeight();	 		//-_- OPTIMIZE: do it only if differences between old and new options
+	UpdateLabelsFixedPositions();	//-_- OPTIMIZE: do it only if differences between old and new options
 }
 //---------------------------------------------------------------------------------------
 wxChartAxis::wxChartAxis(const std::string &id,
@@ -133,8 +111,8 @@ wxChartAxis::wxChartAxis(const std::string &id,
 			)
 		);
     }
-	UpdateLabelsHeight();	 //-_- OPTIMIZE: do it only if differences between old and new options
-	UpdateLabelsFixedPositions();	 //-_- OPTIMIZE: do it only if differences between old and new options
+	UpdateLabelsHeight();			//-_- OPTIMIZE: do it only if differences between old and new options
+	UpdateLabelsFixedPositions();	//-_- OPTIMIZE: do it only if differences between old and new options
 }
 //---------------------------------------------------------------------------------------
 //---------------------------------------------------------------------------------------
@@ -171,15 +149,15 @@ myPointType wxChartAxis::GetTooltipPosition() const
 		m_startPoint = startPoint;
 		m_endPoint = endPoint;
     }
-	UpdateLabelsFixedPositions();	 //-_- OPTIMIZE: do it only if differences between old and new options
+	UpdateLabelsFixedPositions();	//-_- OPTIMIZE: do it only if differences between old and new options
 }
 
 void wxChartAxis::UpdateLabelSizes(wxGraphicsContext &gc)
 {
     m_labels.UpdateSizes(gc);
     pxMaxLabelDimensions.x = m_labels.GetMaxWidth();
-	UpdateLabelsHeight();	 //-_- OPTIMIZE: do it only if differences between old and new options
-	UpdateLabelsFixedPositions();	 //-_- OPTIMIZE: do it only if differences between old and new options
+	UpdateLabelsHeight();			//-_- OPTIMIZE: do it only if differences between old and new options
+	UpdateLabelsFixedPositions();	//-_- OPTIMIZE: do it only if differences between old and new options
 }
 
 void wxChartAxis::UpdateLabelPositions()
@@ -202,8 +180,8 @@ const wxChartLabelGroup& wxChartAxis::GetLabels() const
 void wxChartAxis::SetLabels(const wxVector<wxChartLabel> &labels)
 {
     m_labels.assign(labels.begin(), labels.end());
-	UpdateLabelsHeight();	 //-_- OPTIMIZE: do it only if differences between old and new options
-	UpdateLabelsFixedPositions();	 //-_- OPTIMIZE: do it only if differences between old and new options
+	UpdateLabelsHeight();			//-_- OPTIMIZE: do it only if differences between old and new options
+	UpdateLabelsFixedPositions();	//-_- OPTIMIZE: do it only if differences between old and new options
 }
 //#######################################################################################
 const std::string& wxChartAxis::GetId() const
@@ -241,26 +219,24 @@ myPointType wxChartAxis::CalculateLabelPosition(size_t index)
 	switch (chaxLocation) {
 		case wxCHARTAXISPOSITION_RIGHT:
 			position.m_x = pxLabelX;
-			position.m_y = pSTART_Y - (distance * index) - pxLabelY;
-			//-_- position.m_y = pSTART_Y - (distance * index) - (m_labels[index].GetSize().GetHeight() / 2) - marginCorrection;
+			position.m_y = m_startPoint.m_y - (distance * index) - pxLabelY;
 			return position;
 			break;
 
 		case wxCHARTAXISPOSITION_LEFT:
 			position.m_x = pxLabelX - m_labels[index].GetSize().GetWidth();
-			position.m_y = pSTART_Y - (distance * index) - pxLabelY;
-			//-_- position.m_y = pSTART_Y - (distance * index) - (m_labels[index].GetSize().GetHeight() / 2) - marginCorrection;
+			position.m_y = m_startPoint.m_y - (distance * index) - pxLabelY;
 			return position;
 			break;
 
 		case wxCHARTAXISPOSITION_TOP:
-			position.m_y = pxLabelY; //-_- pSTART_Y - 8;
+			position.m_y = pxLabelY;
 			position.m_x = pxLabelX + (distance * index) - (m_labels[index].GetSize().GetWidth() / 2);
 			return position;
 			break;
 
 		case wxCHARTAXISPOSITION_BOTTOM:
-			position.m_y = pxLabelY; //-_- pSTART_Y + 8;
+			position.m_y = pxLabelY;
 			position.m_x = pxLabelX + (distance * index) - (m_labels[index].GetSize().GetWidth() / 2);
 			return position;
 			break;
@@ -269,46 +245,6 @@ myPointType wxChartAxis::CalculateLabelPosition(size_t index)
 			LogFunction("WHAT?");
 			break;
 	}
-/*
-    if (chaxLocation == wxCHARTAXISPOSITION_LEFT)
-    {
-        wxDouble distance = GetDistanceBetweenTickMarks();
-        wxPoint2DDouble position(
-            pSTART_X - 10 - m_labels[index].GetSize().GetWidth(),
-            pSTART_Y - (distance * index) - (m_labels[index].GetSize().GetHeight() / 2) - marginCorrection
-            );
-
-        if (m_options.GetLabelType() == wxCHARTAXISLABELTYPE_RANGE)
-        {
-            position.m_y -= (distance / 2);
-        }
-
-        return position;
-    }
-    else if (chaxLocation == wxCHARTAXISPOSITION_BOTTOM)
-    {
-        wxDouble distance = GetDistanceBetweenTickMarks();
-        wxPoint2DDouble position(
-            pSTART_X + (distance * index) - (m_labels[index].GetSize().GetWidth() / 2) + marginCorrection,
-            pSTART_Y + 8
-            );
-
-
-        //innerWidth = this.width - (this.xScalePaddingLeft + this.xScalePaddingRight),
-        //valueWidth = innerWidth/Math.max((this.valuesCount - ((this.offsetGridLines) ? 0 : 1)), 1),
-        //valueOffset = (valueWidth * index) + this.xScalePaddingLeft;
-
-
-        if (m_options.GetLabelType() == wxCHARTAXISLABELTYPE_RANGE)
-        {
-            position.m_x += (distance / 2);
-        }
-
-        //return Math.round(valueOffset);
-
-        return position;
-    }
-*/
     wxTrap();
     return myPointType(0, 0);
 }
@@ -321,8 +257,8 @@ myPointType wxChartAxis::GetPosition(myVarType relativeValue) const
 		case wxCHARTAXISPOSITION_LEFT:
 			{
 				return myPointType(
-					pSTART_X,
-					pSTART_Y - (relativeValue * (pSTART_Y - pEND_Y))
+					m_startPoint.m_x,
+					m_startPoint.m_y - (relativeValue * (m_startPoint.m_y - m_endPoint.m_y))
 					);
 			}
 			break;
@@ -331,8 +267,8 @@ myPointType wxChartAxis::GetPosition(myVarType relativeValue) const
 		case wxCHARTAXISPOSITION_BOTTOM:
 			{
 				return myPointType(
-					pSTART_X + (relativeValue * (pEND_X - pSTART_X)),
-					pSTART_Y
+					m_startPoint.m_x + (relativeValue * (m_endPoint.m_x - m_startPoint.m_x)),
+					m_startPoint.m_y
 					);
 			}
 			break;
@@ -340,21 +276,6 @@ myPointType wxChartAxis::GetPosition(myVarType relativeValue) const
 			LogFunction("WHAT?");
 			break;
 	}
-/*    if (chaxLocation == wxCHARTAXISPOSITION_LEFT)
-    {
-        return wxPoint2DDouble(
-            pSTART_X,
-            pSTART_Y - (relativeValue * (pSTART_Y - pEND_Y))
-            );
-    }
-    else if (chaxLocation == wxCHARTAXISPOSITION_BOTTOM)
-    {
-        return wxPoint2DDouble(
-            pSTART_X + (relativeValue * (pEND_X - pSTART_X)),
-            pSTART_Y
-            );
-    }
-*/
     wxTrap();
     return myPointType(0, 0);
 }
@@ -389,7 +310,7 @@ myVarType wxChartAxis::GetDistanceBetweenTickMarks() const
 {
 	//-_- TODO: Make it function of range, number of divisions,
 	//-_- Division minimum distance and label size
-	int nt = GetNumberOfTickMarks();	//-_-
+	int nt = GetNumberOfTickMarks();
 	if (nt<2) {
 		return 0;	//-_- Also saves from a div/0;
 	}
@@ -405,9 +326,9 @@ myVarType wxChartAxis::GetDistanceBetweenTickMarks() const
     }
 
 	if (m_options.IsHorizontal()) {
-		return ((pEND_X - pSTART_X) / (nt + marginCorrection - 1)); //-_- why -1?
+		return ((m_endPoint.m_x - m_startPoint.m_x) / (nt + marginCorrection - 1)); //-_- why -1?
 	}else{
-		return ((pSTART_Y - pEND_Y) / (nt + marginCorrection - 1)); //-_- why -1?
+		return ((m_startPoint.m_y - m_endPoint.m_y) / (nt + marginCorrection - 1)); //-_- why -1?
 	}
     wxTrap();
     return 0;
@@ -418,11 +339,11 @@ myPointType wxChartAxis::GetTickMarkPosition(size_t index) const
 	myVarType valueOffset = (distance * index) + marginCorrection;
 
 	if (m_options.IsVertical()) {
-		valueOffset = pSTART_Y - valueOffset;
-		return myPointType(pSTART_X, valueOffset);
+		valueOffset = m_startPoint.m_y - valueOffset;
+		return myPointType(m_startPoint.m_x, valueOffset);
 	}else{
-		valueOffset = pSTART_X + valueOffset;
-		return myPointType(valueOffset, pSTART_Y);
+		valueOffset = m_startPoint.m_x + valueOffset;
+		return myPointType(valueOffset, m_startPoint.m_y);
 	}
     wxTrap();
     return myPointType(0, 0);
@@ -432,74 +353,39 @@ void wxChartAxis::DrawTickMarks(wxGraphicsContext &gc) const
 {
     wxChartAxisLocation	chaxLocation = m_options.GetLocation();
 
-    myPointType		TickStart,TickEnd;	//-_-
-	wxGraphicsPath path = gc.CreatePath();	//-_-
+    myPointType		TickStart,TickEnd;
+	wxGraphicsPath path = gc.CreatePath();
 
 	size_t n = GetNumberOfTickMarks();
 	for (size_t i = 0; i < n; ++i)
 	{
-		//-_-wxDouble linePositionY = GetTickMarkPosition(i).m_y;
-		//-_-wxGraphicsPath path = gc.CreatePath();
-		//-_-path.MoveToPoint(pSTART_X - TICKMARKS_LENGTH, linePositionY);
-		//-_-path.AddLineToPoint(pSTART_X, linePositionY);
-		//-_-path.AddLineToPoint()
-		//-_-gc.StrokePath(path);
-		TickStart = GetTickMarkPosition(i);	//-_-
-		TickEnd = TickStart;				//-_-
+		TickStart = GetTickMarkPosition(i);
+		TickEnd = TickStart;
 
 		switch (chaxLocation) {
 			case wxCHARTAXISPOSITION_RIGHT:
-				TickEnd.m_x += TICKMARKS_LENGTH;	//-_-
+				TickEnd.m_x += TICKMARKS_LENGTH;
 				break;
 			case wxCHARTAXISPOSITION_LEFT:
-				TickEnd.m_x -= TICKMARKS_LENGTH;	//-_-
+				TickEnd.m_x -= TICKMARKS_LENGTH;
 				break;
 
 			case wxCHARTAXISPOSITION_TOP:
-				TickEnd.m_y -= TICKMARKS_LENGTH;	//-_-
+				TickEnd.m_y -= TICKMARKS_LENGTH;
 				break;
 
 			case wxCHARTAXISPOSITION_BOTTOM:
-				TickEnd.m_y += TICKMARKS_LENGTH;	//-_-
+				TickEnd.m_y += TICKMARKS_LENGTH;
 				break;
 
 			default:
 				LogFunction("WHAT?");
 				break;
 		}
-		path.MoveToPoint(TickStart);		//-_-
-		path.AddLineToPoint(TickEnd);		//-_-
+		path.MoveToPoint(TickStart);
+		path.AddLineToPoint(TickEnd);
 	}
-	gc.StrokePath(path);	//-_-
-
-/*
-    if (chaxLocation == wxCHARTAXISPOSITION_LEFT)
-    {
-        size_t n = GetNumberOfTickMarks();
-        for (size_t i = 0; i < n; ++i)
-        {
-            wxDouble linePositionY = GetTickMarkPosition(i).m_y;
-
-            wxGraphicsPath path = gc.CreatePath();
-            path.MoveToPoint(pSTART_X - 5, linePositionY);
-            path.AddLineToPoint(pSTART_X, linePositionY);
-            gc.StrokePath(path);
-        }
-    }
-    else if (chaxLocation == wxCHARTAXISPOSITION_BOTTOM)
-    {
-        size_t n = GetNumberOfTickMarks();
-        for (size_t i = 0; i < n; ++i)
-        {
-            wxDouble linePosition = GetTickMarkPosition(i).m_x;
-
-            wxGraphicsPath path = gc.CreatePath();
-            path.MoveToPoint(linePosition, pSTART_Y);
-            path.AddLineToPoint(linePosition, pSTART_Y + 5);
-            gc.StrokePath(path);
-        }
-    }
-*/
+	gc.StrokePath(path);
 }
 
 //-_- ------------------------------------------------------------------------------------------------------------
@@ -527,17 +413,17 @@ void wxChartAxis::UpdateLabelsFixedPositions()
 	switch (m_options.GetLocation()) {
 		case wxCHARTAXISPOSITION_LEFT:
 			pxDifference = 1;
-			pxLabelX = pSTART_X - TICKMARKS_LENGTH - marginCorrection - pxDifference; // 1px correction to make it like the right
+			pxLabelX = m_startPoint.m_x - TICKMARKS_LENGTH - marginCorrection - pxDifference; // 1px correction to make it like the right
 			break;
 		case wxCHARTAXISPOSITION_RIGHT:
-			pxLabelX = pSTART_X + TICKMARKS_LENGTH - marginCorrection;
+			pxLabelX = m_startPoint.m_x + TICKMARKS_LENGTH - marginCorrection;
 			break;
 		case wxCHARTAXISPOSITION_TOP:
 			pxDifference = 1;
-			pxLabelY = pSTART_Y - TICKMARKS_LENGTH - pxMaxLabelDimensions.y - pxDifference; // 1px correction to make it like the bottom
+			pxLabelY = m_startPoint.m_y - TICKMARKS_LENGTH - pxMaxLabelDimensions.y - pxDifference; // 1px correction to make it like the bottom
 			break;
 		case wxCHARTAXISPOSITION_BOTTOM:
-			pxLabelY = pSTART_Y + TICKMARKS_LENGTH;
+			pxLabelY = m_startPoint.m_y + TICKMARKS_LENGTH;
 			break;
 		default:
 			LogFunction("WHAT?");
@@ -546,7 +432,7 @@ void wxChartAxis::UpdateLabelsFixedPositions()
 	}
 
 	if (m_options.IsHorizontal() ) {
-		pxLabelX = pSTART_X + marginCorrection;
+		pxLabelX = m_startPoint.m_x + marginCorrection;
 		if (m_options.GetLabelType() == wxCHARTAXISLABELTYPE_RANGE) {
 			pxLabelX += (distance / 2);
 		}
@@ -568,38 +454,38 @@ void wxChartAxis::FitInThisRect	(const wxRect pxArea)
 	switch (m_options.GetLocation()) {
 		case wxCHARTAXISPOSITION_LEFT:
 			if (Rev) {
-				pSTART	= pxArea.GetTopLeft();
-				pEND	= pxArea.GetBottomLeft();
+				m_startPoint	= pxArea.GetTopLeft();
+				m_endPoint	= pxArea.GetBottomLeft();
 			}else{
-				pSTART	= pxArea.GetBottomLeft();
-				pEND	= pxArea.GetTopLeft();
+				m_startPoint	= pxArea.GetBottomLeft();
+				m_endPoint	= pxArea.GetTopLeft();
 			}
 			break;
 		case wxCHARTAXISPOSITION_RIGHT:
 			if (Rev) {
-				pSTART	= pxArea.GetTopRight();
-				pEND	= pxArea.GetBottomRight();
+				m_startPoint	= pxArea.GetTopRight();
+				m_endPoint	= pxArea.GetBottomRight();
 			}else{
-				pSTART	= pxArea.GetBottomRight();
-				pEND	= pxArea.GetTopRight();
+				m_startPoint	= pxArea.GetBottomRight();
+				m_endPoint	= pxArea.GetTopRight();
 			}
 			break;
 		case wxCHARTAXISPOSITION_TOP:
 			if (Rev) {
-				pSTART	= pxArea.GetTopRight();
-				pEND	= pxArea.GetTopLeft();
+				m_startPoint	= pxArea.GetTopRight();
+				m_endPoint	= pxArea.GetTopLeft();
 			}else{
-				pSTART	= pxArea.GetTopLeft();
-				pEND	= pxArea.GetTopRight();
+				m_startPoint	= pxArea.GetTopLeft();
+				m_endPoint	= pxArea.GetTopRight();
 			}
 			break;
 		case wxCHARTAXISPOSITION_BOTTOM:
 			if (Rev) {
-				pSTART	= pxArea.GetBottomRight();
-				pEND	= pxArea.GetBottomLeft();
+				m_startPoint	= pxArea.GetBottomRight();
+				m_endPoint	= pxArea.GetBottomLeft();
 			}else{
-				pSTART	= pxArea.GetBottomLeft();
-				pEND	= pxArea.GetBottomRight();
+				m_startPoint	= pxArea.GetBottomLeft();
+				m_endPoint	= pxArea.GetBottomRight();
 			}
 			break;
 		default:

@@ -113,7 +113,7 @@ bool wxMath2DPlotCtrl::UpdateDataPoints(std::size_t index, const wxVector<wxPoin
 bool wxMath2DPlotCtrl::UpdateDataPointsFromArrayOfBytes	(std::size_t index,const unsigned char *byteArray, const std::size_t ArraySize) {
     if (!m_math2dPlot.UpdateDataPointsFromArrayOfBytes(index, byteArray, ArraySize))
         return false;
-    //Update();
+    //-_- Update();	// This recalculate EVERYTHING each time!
     Refresh();
     return true;
 }
@@ -148,7 +148,7 @@ void wxMath2DPlotCtrl::Update()
     }
 }
 
-void wxMath2DPlotCtrl::Refresh()
+void wxMath2DPlotCtrl::Refresh()	//-_-
 {
     auto parent = this->GetParent();
     if(parent) {
@@ -242,7 +242,7 @@ void wxMath2DPlotCtrl::CreateContextMenu()
                 type = wxBitmapType::wxBITMAP_TYPE_JPEG;
                 if (wxImage::FindHandler(wxBitmapType::wxBITMAP_TYPE_JPEG) == 0)
                 {
-//JPEG                    wxImage::AddHandler(new wxJPEGHandler());
+                    wxImage::AddHandler(new wxJPEGHandler());
                 }
                 break;
 

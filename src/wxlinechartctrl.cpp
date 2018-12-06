@@ -93,7 +93,7 @@ void wxLineChartCtrl::CreateContextMenu()
                 type = wxBitmapType::wxBITMAP_TYPE_JPEG;
                 if (wxImage::FindHandler(wxBitmapType::wxBITMAP_TYPE_JPEG) == 0)
                 {
-//JPEG                    wxImage::AddHandler(new wxJPEGHandler());
+                    wxImage::AddHandler(new wxJPEGHandler());
                 }
                 break;
 

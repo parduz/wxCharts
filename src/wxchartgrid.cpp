@@ -124,25 +124,6 @@ void wxChartGrid::Draw(wxGraphicsContext &gc) const
 			LogFunction("WHAT?");
 			break;
 	}
-/*
-    if (XLocation == wxCHARTAXISPOSITION_LEFT)
-    {
-        verticalAxis = m_XAxis.get();
-    }
-    else if (YLocation == wxCHARTAXISPOSITION_LEFT)
-    {
-        verticalAxis = m_YAxis.get();
-    }
-
-    if (XLocation == wxCHARTAXISPOSITION_BOTTOM)
-    {
-        horizontalAxis = m_XAxis.get();
-    }
-    else if (YLocation == wxCHARTAXISPOSITION_BOTTOM)
-    {
-        horizontalAxis = m_YAxis.get();
-    }
-*/
     if (m_options.GetHorizontalGridLineOptions().ShowGridLines())
     {
         DrawHorizontalGridLines(*horizontalAxis, *verticalAxis, m_options.GetHorizontalGridLineOptions(), gc);
@@ -191,11 +172,6 @@ void wxChartGrid::Fit(wxGraphicsContext &gc)
 	// each Axis knows his stuffs.
 	int VertPadding = std::max(m_XAxis->pxPadding,m_YAxis->pxMaxLabelDimensions.y/2);
 	int HorzPadding = std::max(m_YAxis->pxPadding,m_XAxis->pxMaxLabelDimensions.x/2);
-//	int xfs = m_XAxis->GetOptions().GetFontOptions().GetSize();	// h of the Y axis font -- in pixels?
-//	int yfs = m_YAxis->GetOptions().GetFontOptions().GetSize();	// h of the Y axis font -- in pixels?
-//	int xMaxLabSize = m_XAxis->GetLabels().GetMaxWidth();
-//	int yMaxLabSize = m_YAxis->GetLabels().GetMaxWidth();
-
 	// Where's the Axis?
     wxChartAxisLocation	XLocation = m_XAxis->GetOptions().GetLocation();
     wxChartAxisLocation	YLocation = m_YAxis->GetOptions().GetLocation();
@@ -242,27 +218,6 @@ void wxChartGrid::Fit(wxGraphicsContext &gc)
 			LogFunction("WHAT?");
 			break;
 	}
-#ifdef USE_WXPOINTDOUBLE
-//	m_XAxis->Fit(wxPoint2DDouble(m_pxGraphArea.GetLeftBottom()), wxPoint2DDouble(m_pxGraphArea.GetRightBottom()));
-//	m_YAxis->Fit(wxPoint2DDouble(m_pxGraphArea.GetLeftBottom()), wxPoint2DDouble(m_pxGraphArea.GetLeftTop()));
-#else
-//	m_XAxis->Fit(m_pxGraphArea.GetLeftBottom(), m_pxGraphArea.GetRightBottom());
-//	m_YAxis->Fit(m_pxGraphArea.GetLeftBottom(), m_pxGraphArea.GetLeftTop());
-#endif // USE_WXPOINTDOUBLE
-/*
-	//-_- pass to each axis the min/max range and the "fixed" orthogonal position
-	int xAxisY = m_XAxis->GetOptions().IsOpposite()?t:b;
-	int yAxisX = m_YAxis->GetOptions().IsOpposite()?r:l;
-
-	m_XAxis->SetRangeAndPosition(
-		wxPoint(l,xAxisY),
-		wxPoint(r,xAxisY)
-	);
-	m_XAxis->SetRangeAndPosition(
-		wxPoint(b,yAxisX),
-		wxPoint(t,yAxisX)
-	);
-*/
 	m_XAxis->FitInThisRect(m_pxGraphArea);
 	m_YAxis->FitInThisRect(m_pxGraphArea);
 	// Recalculate the labels positions along the axis
@@ -421,106 +376,6 @@ void wxChartGrid::Update()
     m_mapping = wxChartGridMapping(m_mapping.GetSize(), m_XAxis, m_YAxis);
     m_needsFit = true;
 }
-//-_-
-/*
-void wxChartGrid::CalculatePadding(const wxChartAxis &xAxis,
-                                   const wxChartAxis &yAxis,
-                                   wxDouble &left,
-                                   wxDouble &right)
-{
-    wxChartAxisLocation	XLocation = xAxis.GetOptions().GetLocation();
-    //wxChartAxisLocation	YLocation = yAxis.GetOptions().GetLocation();
-
-    size_t szY = yAxis.GetLabels().size();
-    size_t szX = xAxis.GetLabels().size();
-
-    int firstLabelWidth;
-
-
-	switch (XLocation) {
-		case wxCHARTAXISPOSITION_RIGHT:
-			LogFunction("RIGHT");
-		case wxCHARTAXISPOSITION_LEFT:
-			{
-				// Either the first y label or any of the x labels can be the widest
-				// so they are all taken into account to compute the left padding
-				left = xAxis.GetLabels().GetMaxWidth();// + 10;
-				right = 0;
-				firstLabelWidth = yAxis.GetLabels().front().GetSize().GetWidth() / 2;
-
-				if ( szY>0 ) {
-					if ( firstLabelWidth>left ) {
-						left = firstLabelWidth;
-					}
-					right = (yAxis.GetLabels().back().GetSize().GetWidth() / 2);
-				}
-				right +=50;
-				left+=20;
-			}
-			break;
-
-		case wxCHARTAXISPOSITION_TOP:
-			LogFunction("TOP");
-		case wxCHARTAXISPOSITION_BOTTOM:
-			{
-				// Either the first x label or any of the y labels can be the widest
-				// so they are all taken into account to compute the left padding
-				left = yAxis.GetLabels().GetMaxWidth();// + 10;
-				right = 0;
-				firstLabelWidth = xAxis.GetLabels().front().GetSize().GetWidth() / 2;
-
-				if ( szY>0 ) {
-					if ( firstLabelWidth>left ) {
-						left = firstLabelWidth;
-					}
-					right = (xAxis.GetLabels().back().GetSize().GetWidth() / 2);
-				}
-				left += 50;
-				right+=20;
-			}
-			break;
-		default:
-			LogFunction("WHAT?");
-			break;
-	}
-*/ //-_-
-/*
-    if (XLocation == wxCHARTAXISPOSITION_BOTTOM)
-    {
-        // Either the first x label or any of the y labels can be the widest
-        // so they are all taken into account to compute the left padding
-        left = yAxis.GetLabels().GetMaxWidth() + 10;
-        if ((xAxis.GetLabels().size() > 0) && ((xAxis.GetLabels().front().GetSize().GetWidth() / 2) > left))
-        {
-            left = (xAxis.GetLabels().front().GetSize().GetWidth() / 2);
-        }
-
-        right = 0;
-        if (xAxis.GetLabels().size() > 0)
-        {
-            right = (xAxis.GetLabels().back().GetSize().GetWidth() / 2);
-        }
-    }
-    else if (XLocation == wxCHARTAXISPOSITION_LEFT)
-    {
-        // Either the first y label or any of the x labels can be the widest
-        // so they are all taken into account to compute the left padding
-        left = xAxis.GetLabels().GetMaxWidth() + 10;
-        if ((yAxis.GetLabels().size() > 0) && ((yAxis.GetLabels().front().GetSize().GetWidth() / 2) > left))
-        {
-            left = (yAxis.GetLabels().front().GetSize().GetWidth() / 2);
-        }
-
-        right = 0;
-        if (yAxis.GetLabels().size() > 0)
-        {
-            right = (yAxis.GetLabels().back().GetSize().GetWidth() / 2);
-        }
-    }
-*/
-/* -_-
-}
-*/ //-_-
 
 void wxChartGrid::DrawHorizontalGridLines(const wxChartAxis &horizontalAxis,
         const wxChartAxis &verticalAxis,

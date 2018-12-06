@@ -31,6 +31,10 @@
     https://github.com/nnnick/Chart.js/blob/master/LICENSE.md
 */
 
+
+//-_- THE LINES ARE COMMENTED OUT JUST 'CAUSE I'M NOT 
+//-_- USING THE TOOLTIPS AND I WANT THE LESS FILES POSSIBLE TO MANAGE
+
 #include "wxchartmultitooltip.h"
 #include "wxchartutilities.h"
 #include <wx/brush.h>

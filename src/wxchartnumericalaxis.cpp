@@ -43,7 +43,7 @@ wxChartNumericalAxis::wxChartNumericalAxis(const std::string &id,
                                            wxDouble minValue,
                                            wxDouble maxValue,
                                            const wxChartAxisOptions &options,
-                                           bool Forced
+                                           bool Forced	//-_- 'cause the problems with "forced" axis limits
                                            )
     : wxChartAxis(id, options),
     m_minValue(minValue), m_maxValue(maxValue)
@@ -70,6 +70,8 @@ wxChartNumericalAxis::wxChartNumericalAxis(const std::string &id,
     if ( Forced || options.GetEndValueMode() == wxCHARTAXISVALUEMODE_EXPLICIT ) {
 		graphMinXValue = floor(effectiveMinXValue);
 		graphMaxXValue = ceil(effectiveMaxXValue);
+		
+		//-_- UGLY way to see something working
 		xValueRange = int(graphMaxXValue - graphMinXValue);
 		if (fmod(xValueRange,10) == 0) {
 			steps = 10;

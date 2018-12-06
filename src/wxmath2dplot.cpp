@@ -827,6 +827,7 @@ void wxMath2DPlot::DoDraw(wxGraphicsContext &gc,
 			else
 			{
 				// TODO : transparent pen
+				//-_- Why?
 				static const wxColor transparent(255, 255, 255, 0);
 				wxPen pen(transparent, 0);
 				gc.SetPen(pen);

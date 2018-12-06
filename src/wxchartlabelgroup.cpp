@@ -44,7 +44,6 @@ void wxChartLabelGroup::UpdateSizes(wxGraphicsContext &gc)
     {
         (*this)[i].UpdateSize(gc);
 
-        // -_- const wxSize size = (*this)[i].GetSize();
         LabelWidth = (*this)[i].GetSize().GetWidth();
         if (LabelWidth > m_px_maxWidth)
         {

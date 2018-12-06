@@ -81,25 +81,6 @@ wxPoint2DDouble wxChartGridMapping::GetWindowPosition(wxDouble x,
 	else {
 		LogFunction("WHAT?");
 	}
-/*
-
-    if ((numericalXAxis.GetOptions().GetLocation() == wxCHARTAXISPOSITION_BOTTOM) &&
-        (m_YAxis->GetOptions().GetLocation() == wxCHARTAXISPOSITION_LEFT))
-    {
-        return wxPoint2DDouble(
-            m_XAxis->GetPosition((x - numericalXAxis.GetMinValue()) / (numericalXAxis.GetMaxValue() - numericalXAxis.GetMinValue())).m_x,
-            m_YAxis->GetPosition((y - numericalYAxis.GetMinValue()) / (numericalYAxis.GetMaxValue() - numericalYAxis.GetMinValue())).m_y
-            );
-    }
-    else if ((numericalXAxis.GetOptions().GetLocation() == wxCHARTAXISPOSITION_LEFT) &&
-        (m_YAxis->GetOptions().GetLocation() == wxCHARTAXISPOSITION_BOTTOM))
-    {
-        return wxPoint2DDouble(
-            m_YAxis->GetPosition((y - numericalYAxis.GetMinValue()) / (numericalYAxis.GetMaxValue() - numericalYAxis.GetMinValue())).m_x,
-            m_XAxis->GetPosition((x - numericalXAxis.GetMinValue()) / (numericalXAxis.GetMaxValue() - numericalXAxis.GetMinValue())).m_y
-            );
-    }
-*/
     wxTrap();
     return wxPoint2DDouble(0, 0);
 }
@@ -130,25 +111,6 @@ wxPoint2DDouble wxChartGridMapping::GetWindowPositionAtTickMark(size_t index,
 	else {
 		LogFunction("WHAT?");
 	}
-/*
-
-    if ((m_XAxis->GetOptions().GetLocation() == wxCHARTAXISPOSITION_BOTTOM) &&
-        (m_YAxis->GetOptions().GetLocation() == wxCHARTAXISPOSITION_LEFT))
-    {
-        return wxPoint2DDouble(
-            m_XAxis->GetTickMarkPosition(index).m_x,
-            m_YAxis->GetPosition((value - numericalYAxis.GetMinValue()) / (numericalYAxis.GetMaxValue() - numericalYAxis.GetMinValue())).m_y
-            );
-    }
-    else if ((m_XAxis->GetOptions().GetLocation() == wxCHARTAXISPOSITION_LEFT) &&
-        (m_YAxis->GetOptions().GetLocation() == wxCHARTAXISPOSITION_BOTTOM))
-    {
-        return wxPoint2DDouble(
-            m_YAxis->GetPosition((value - numericalYAxis.GetMinValue()) / (numericalYAxis.GetMaxValue() - numericalYAxis.GetMinValue())).m_x,
-            m_XAxis->GetTickMarkPosition(index).m_y
-            );
-    }
-*/
     wxTrap();
     return wxPoint2DDouble(0, 0);
 }
